@@ -95,6 +95,6 @@ void print_object(object_t *obj) {
   if (is_number(obj)) {
     printf("[num: %d]\n", obj->u.num.val);
   } else {
-    assert(0);
+    printf("[unknown type: %d]\n", obj->type);
   }
 }
