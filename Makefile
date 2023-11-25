@@ -5,7 +5,7 @@ SRCS := runtime-impl.c runtime.h test.c nut.c
 all: test
 
 test: test.o runtime.o nut.o
-	gcc $(^) -o $@
+	gcc $(^) -o $@ -lm -no-pie
 
 runtime.o: runtime-impl.c
 	gcc -c $(<) -o $@
