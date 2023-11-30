@@ -314,19 +314,12 @@ apply_plus:
 
 (defun main ()
   (let ((o (make-output)))
-    (compile-expression
-     o '(defun nut_eval_arg_list (args) args) nil)
-    (compile-expression
-     o '(defun nut_eval (expr)
-         (if (is_cons expr)
-             (let ((op (car expr))
-                   (args (nut_eval_arg_list (cdr expr))))
-               (if (is_symbol op)
-                   (if (int_eq (strcmp (symbol_string op) "+") 0)
-                       (apply_plus args)
-                       -1)
-                   -2))
-             -3)) nil)
+    (with-open-file (in-stream "nut.lisp")
+      (let ((eof-value (gensym)))
+        (loop for expr = (read in-stream nil eof-value)
+              while (not (eq expr eof-value))
+              when expr do
+                (compile-expression o expr nil))))
     (with-open-file (out-stream "nut.s"
                      :direction :output
                      :if-exists :supersede
